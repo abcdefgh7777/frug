@@ -18,7 +18,7 @@ function PfpBuilder({ onClose }) {
   })
 
   const [activeTab, setActiveTab] = useState('bg')
-  const [frugName, setFrugName] = useState('')
+  const [fugName, setFrugName] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [customBodyColor, setCustomBodyColor] = useState('#ff6b6b')
   const [customBodyColor2, setCustomBodyColor2] = useState('#feca57')
@@ -590,7 +590,7 @@ function PfpBuilder({ onClose }) {
 
 
       const link = document.createElement('a')
-      link.download = 'my-frug.png'
+      link.download = 'my-fug.png'
       link.href = canvas.toDataURL('image/png')
       link.click()
     }
@@ -608,11 +608,11 @@ function PfpBuilder({ onClose }) {
             <button className="terminal-btn minimize"></button>
             <button className="terminal-btn maximize"></button>
           </div>
-          <span className="terminal-title">FRUG PFP Builder</span>
+          <span className="terminal-title">FUG PFP Builder</span>
         </div>
 
         <div className="terminal-content">
-          <h1 className="pfp-builder-title">GET UR FRUG</h1>
+          <h1 className="pfp-builder-title">GET UR FUG</h1>
 
         <div className="pfp-builder-content">
           {/* Preview */}
@@ -699,9 +699,9 @@ function PfpBuilder({ onClose }) {
             </div>
 
             {/* Generated Name Display */}
-            {frugName && (
-              <div className="frug-name-display">
-                <span>{frugName}</span>
+            {fugName && (
+              <div className="fug-name-display">
+                <span>{fugName}</span>
               </div>
             )}
 
@@ -715,7 +715,7 @@ function PfpBuilder({ onClose }) {
               onClick={generatePogName}
               disabled={isGenerating}
             >
-              {isGenerating ? 'ASKING...' : 'ASK PROPHET FRUG A NAME'}
+              {isGenerating ? 'ASKING...' : 'ASK PROPHET FUG A NAME'}
             </button>
           </div>
 

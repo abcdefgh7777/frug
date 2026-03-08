@@ -177,7 +177,7 @@
 }
 
 /* Name Display */
-.frug-name-display {
+.fug-name-display {
   margin-top: 6px;
   padding: 4px 8px;
   background: #fff;
@@ -186,7 +186,7 @@
   text-align: center;
 }
 
-.frug-name-display span {
+.fug-name-display span {
   font-size: 18px;
   font-weight: bold;
   letter-spacing: 2px;
