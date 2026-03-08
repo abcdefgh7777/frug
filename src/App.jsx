@@ -2,36 +2,36 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import PfpBuilder from './PfpBuilder'
 
+// Preload images immediately
+const BG_FRAMES = ['/fug1.png', '/fug2.png', '/fug3.png']
+const TV_FRAMES = ['/tv.png', '/tv2.png', '/tv3.png']
+const BG_SEQUENCE = [0, 1, 2, 1] // fug1 → fug2 → fug3 → fug2
+const TV_SEQUENCE = [0, 1, 2, 1] // tv → tv2 → tv3 → tv2
+
+// Preload all images into browser cache
+BG_FRAMES.concat(TV_FRAMES).forEach(src => {
+  const img = new Image()
+  img.src = src
+})
+
 function App() {
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showPfpBuilder, setShowPfpBuilder] = useState(false)
   const [showGallery, setShowGallery] = useState(false)
-  const [bgFrame, setBgFrame] = useState(0)
-  const [tvFrame, setTvFrame] = useState(0)
+  const [bgStep, setBgStep] = useState(0)
+  const [tvStep, setTvStep] = useState(0)
   const [recentFugs, setRecentFugs] = useState([])
   const [allFugs, setAllFugs] = useState([])
   const [tvIndex, setTvIndex] = useState(0)
   const [galleryPage, setGalleryPage] = useState(1)
   const [galleryTotal, setGalleryTotal] = useState(0)
 
-  // Background animation: fug1 → fug2 → fug3 → fug2 → loop
-  const bgFrames = ['/fug1.png', '/fug2.png', '/fug3.png', '/fug2.png']
-  // TV animation: tv → tv2 → tv3 → tv2 → loop
-  const tvFrames = ['/tv.png', '/tv2.png', '/tv3.png', '/tv2.png']
-
+  // Single animation loop for both bg and tv
   useEffect(() => {
     const interval = setInterval(() => {
-      setBgFrame((prev) => (prev + 1) % bgFrames.length)
+      setBgStep(prev => (prev + 1) % BG_SEQUENCE.length)
+      setTvStep(prev => (prev + 1) % TV_SEQUENCE.length)
     }, 200)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTvFrame((prev) => (prev + 1) % tvFrames.length)
-    }, 200)
-
     return () => clearInterval(interval)
   }, [])
 
@@ -48,7 +48,6 @@ function App() {
 
   useEffect(() => {
     fetchRecentFugs()
-    // Poll every 15 seconds for new fugs
     const poll = setInterval(fetchRecentFugs, 15000)
     return () => clearInterval(poll)
   }, [])
@@ -57,7 +56,7 @@ function App() {
   useEffect(() => {
     if (recentFugs.length === 0) return
     const interval = setInterval(() => {
-      setTvIndex((prev) => (prev + 1) % recentFugs.length)
+      setTvIndex(prev => (prev + 1) % recentFugs.length)
     }, 3000)
     return () => clearInterval(interval)
   }, [recentFugs.length])
@@ -82,7 +81,6 @@ function App() {
     fetchGalleryFugs(1)
   }
 
-  // Refresh TV when PFP builder closes (in case they submitted)
   const handlePfpClose = () => {
     setShowPfpBuilder(false)
     fetchRecentFugs()
@@ -99,23 +97,38 @@ function App() {
   }
 
   const currentTvFug = recentFugs[tvIndex]
+  const activeBgFrame = BG_SEQUENCE[bgStep]
+  const activeTvFrame = TV_SEQUENCE[tvStep]
 
   return (
     <div className="main-wrapper">
       {/* Hero Section */}
       <div className="container">
 
-        {/* Background Image - Animated fug loop */}
-        <div
-          className="background"
-          style={{
-            backgroundImage: `url(${bgFrames[bgFrame]})`
-          }}
-        />
+        {/* Background - all frames stacked, toggle visibility */}
+        {BG_FRAMES.map((src, i) => (
+          <div
+            key={src}
+            className="background"
+            style={{
+              backgroundImage: `url(${src})`,
+              opacity: activeBgFrame === i ? 1 : 0,
+            }}
+          />
+        ))}
 
         {/* TV - bottom right */}
         <div className="tv-container" onClick={openGallery}>
-          <img src={tvFrames[tvFrame]} alt="FUG TV" className="tv-frame" />
+          {/* All TV frames stacked, toggle visibility */}
+          {TV_FRAMES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt="FUG TV"
+              className="tv-frame"
+              style={{ opacity: activeTvFrame === i ? 1 : 0 }}
+            />
+          ))}
           {currentTvFug && (
             <div className="tv-screen">
               <img src={currentTvFug.image_data} alt={currentTvFug.name} className="tv-fug-image" />
@@ -131,7 +144,7 @@ function App() {
           <div className="tv-count">{recentFugs.length > 0 ? `${recentFugs.length} FUGS` : ''}</div>
         </div>
 
-        {/* Header - Menu top left */}
+        {/* Header */}
         <header className="header">
           <img src="/fug-icon.png" alt="Fug" className="menu-icon" />
           <nav className="nav">
@@ -150,7 +163,7 @@ function App() {
           </nav>
         </header>
 
-        {/* Footer on Hero */}
+        {/* Footer */}
         <footer className="hero-footer">
           <p>
             © 2026 FUG. ALL RIGHTS RESERVED.
@@ -164,11 +177,10 @@ function App() {
         </footer>
       </div>
 
-      {/* About Modal - Mac Terminal Style */}
+      {/* About Modal */}
       {showAboutModal && (
         <div className="cult-modal-overlay" onClick={() => setShowAboutModal(false)}>
           <div className="cult-modal" onClick={(e) => e.stopPropagation()}>
-            {/* Mac Terminal Title Bar */}
             <div className="cult-titlebar">
               <div className="cult-buttons">
                 <button className="cult-btn close" onClick={() => setShowAboutModal(false)}></button>
@@ -180,33 +192,16 @@ function App() {
 
             <div className="cult-content">
               <h1 className="cult-heading">WHY FUG?</h1>
-
               <div className="cult-story">
-                <p>
-                  I've been an artist since the first cycle of crypto. Back in the early days, before Solana was even a thing, I was already trying to make it with NFTs. I watched others succeed, tried to do the same, but never made a single sale. Eventually I gave up and went back to being a normie for a few years.
-                </p>
-                <p>
-                  But I always had this character I kept drawing - a frog. Kind of a broke, weird looking frog. I liked this guy so much. I don't know if anyone else would feel the same way about him, but I wanted to give it one more shot.
-                </p>
-                <p>
-                  So I drew my fug and decided to just give it away to everyone. I figured if people like him, maybe we could build a community around fug - a cult even. That's why everything is open source. You can grab the files from the website, make your own fug picture, and if you want to draw your own version, there's simple tools right here to do it.
-                </p>
-                <p>
-                  I'm not gonna pretend I have some big master plan. I just want people to not forget fug. I want everyone to remember him. That's why I made him.
-                </p>
-                <p>
-                  I don't have much more to say. Just hope everyone likes fug like I do.
-                </p>
+                <p>I've been an artist since the first cycle of crypto. Back in the early days, before Solana was even a thing, I was already trying to make it with NFTs. I watched others succeed, tried to do the same, but never made a single sale. Eventually I gave up and went back to being a normie for a few years.</p>
+                <p>But I always had this character I kept drawing - a frog. Kind of a broke, weird looking frog. I liked this guy so much. I don't know if anyone else would feel the same way about him, but I wanted to give it one more shot.</p>
+                <p>So I drew my fug and decided to just give it away to everyone. I figured if people like him, maybe we could build a community around fug - a cult even. That's why everything is open source. You can grab the files from the website, make your own fug picture, and if you want to draw your own version, there's simple tools right here to do it.</p>
+                <p>I'm not gonna pretend I have some big master plan. I just want people to not forget fug. I want everyone to remember him. That's why I made him.</p>
+                <p>I don't have much more to say. Just hope everyone likes fug like I do.</p>
               </div>
-
               <div className="cult-footer">
                 <p className="cult-slogan">LONG LIVE FUG</p>
-                <a
-                  href="https://x.com/fugdafrog"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cult-x-link"
-                >
+                <a href="https://x.com/fugdafrog" target="_blank" rel="noopener noreferrer" className="cult-x-link">
                   <svg viewBox="0 0 24 24" width="18" height="18">
                     <rect width="24" height="24" rx="4" fill="black"/>
                     <path d="M16.5 5h2.4l-5.2 5.9 6.1 8.1h-4.7l-3.8-4.9-4.3 4.9H4.6l5.6-6.4L4.3 5h4.8l3.4 4.5L16.5 5zm-.9 12.6h1.3L8.5 6.3H7.1l8.5 11.3z" fill="white"/>
@@ -253,21 +248,9 @@ function App() {
 
               {galleryTotal > 50 && (
                 <div className="gallery-pagination">
-                  <button
-                    className="pfp-btn"
-                    disabled={galleryPage <= 1}
-                    onClick={() => fetchGalleryFugs(galleryPage - 1)}
-                  >
-                    PREV
-                  </button>
+                  <button className="pfp-btn" disabled={galleryPage <= 1} onClick={() => fetchGalleryFugs(galleryPage - 1)}>PREV</button>
                   <span>PAGE {galleryPage} / {Math.ceil(galleryTotal / 50)}</span>
-                  <button
-                    className="pfp-btn"
-                    disabled={galleryPage >= Math.ceil(galleryTotal / 50)}
-                    onClick={() => fetchGalleryFugs(galleryPage + 1)}
-                  >
-                    NEXT
-                  </button>
+                  <button className="pfp-btn" disabled={galleryPage >= Math.ceil(galleryTotal / 50)} onClick={() => fetchGalleryFugs(galleryPage + 1)}>NEXT</button>
                 </div>
               )}
 
