@@ -715,7 +715,7 @@ function PfpBuilder({ onClose }) {
               onClick={generatePogName}
               disabled={isGenerating}
             >
-              {isGenerating ? 'ASKING...' : 'NAME ME'}
+              {isGenerating ? 'ASKING...' : 'ASK PROPHET FRUG A NAME'}
             </button>
           </div>
 

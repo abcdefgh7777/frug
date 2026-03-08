@@ -14,7 +14,10 @@
       "WebFetch(domain:platform.moonshot.ai)",
       "Bash(mv:*)",
       "Bash(curl:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(railway:*)",
+      "WebFetch(domain:api.moonshot.cn)"
     ],
     "deny": [],
     "ask": []
