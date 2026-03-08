@@ -18,8 +18,10 @@ function PfpBuilder({ onClose }) {
   })
 
   const [activeTab, setActiveTab] = useState('bg')
-  const [fugName, setFrugName] = useState('')
+  const [fugName, setFugName] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [customBodyColor, setCustomBodyColor] = useState('#ff6b6b')
   const [customBodyColor2, setCustomBodyColor2] = useState('#feca57')
   const [useCustomBody, setUseCustomBody] = useState(false)
@@ -238,7 +240,7 @@ function PfpBuilder({ onClose }) {
 
   const generatePogName = async () => {
     setIsGenerating(true)
-    setFrugName('')
+    setFugName('')
 
     try {
       const response = await fetch('/api/generate-name', {
@@ -250,13 +252,13 @@ function PfpBuilder({ onClose }) {
 
       const data = await response.json()
       if (data.name) {
-        setFrugName(data.name)
+        setFugName(data.name)
       } else {
-        setFrugName('TRY AGAIN')
+        setFugName('TRY AGAIN')
       }
     } catch (error) {
       console.error('Error generating name:', error)
-      setFrugName('TRY AGAIN')
+      setFugName('TRY AGAIN')
     }
 
     setIsGenerating(false)
@@ -532,7 +534,8 @@ function PfpBuilder({ onClose }) {
     }
   }
 
-  const downloadPfp = () => {
+  // Build the final canvas and return as data URL
+  const buildFinalCanvas = async () => {
     const canvas = document.createElement('canvas')
     canvas.width = 512
     canvas.height = 512
@@ -548,54 +551,75 @@ function PfpBuilder({ onClose }) {
       })
     }
 
-    const drawLayers = async () => {
-      for (const layer of LAYERS_CONFIG) {
-        // Handle custom background
-        if (layer.id === 'bg' && useCustomBg) {
-          drawCustomBgOnCanvas(ctx)
-          continue
-        }
-
-        // Handle custom body
-        if (layer.id === 'body' && useCustomBody && customBodyImage) {
-          try {
-            const img = await loadImage(customBodyImage)
-            ctx.drawImage(img, 0, 0, 512, 512)
-          } catch (e) {
-            console.error('Failed to load custom body')
-          }
-          continue
-        }
-
-        const file = selectedLayers[layer.id]
-        if (file) {
-          try {
-            const img = await loadImage(`/nfts/${layer.id}/${file}`)
-            ctx.drawImage(img, 0, 0, 512, 512)
-          } catch (e) {
-            console.error(`Failed to load ${layer.id}/${file}`)
-          }
-        }
+    for (const layer of LAYERS_CONFIG) {
+      if (layer.id === 'bg' && useCustomBg) {
+        drawCustomBgOnCanvas(ctx)
+        continue
       }
-
-      // Draw user drawing on top
-      if (drawingDataUrl) {
+      if (layer.id === 'body' && useCustomBody && customBodyImage) {
         try {
-          const drawImg = await loadImage(drawingDataUrl)
-          ctx.drawImage(drawImg, 0, 0, 512, 512)
+          const img = await loadImage(customBodyImage)
+          ctx.drawImage(img, 0, 0, 512, 512)
         } catch (e) {
-          console.error('Failed to load drawing')
+          console.error('Failed to load custom body')
+        }
+        continue
+      }
+      const file = selectedLayers[layer.id]
+      if (file) {
+        try {
+          const img = await loadImage(`/nfts/${layer.id}/${file}`)
+          ctx.drawImage(img, 0, 0, 512, 512)
+        } catch (e) {
+          console.error(`Failed to load ${layer.id}/${file}`)
         }
       }
-
-
-      const link = document.createElement('a')
-      link.download = 'my-fug.png'
-      link.href = canvas.toDataURL('image/png')
-      link.click()
     }
 
-    drawLayers()
+    if (drawingDataUrl) {
+      try {
+        const drawImg = await loadImage(drawingDataUrl)
+        ctx.drawImage(drawImg, 0, 0, 512, 512)
+      } catch (e) {
+        console.error('Failed to load drawing')
+      }
+    }
+
+    return canvas.toDataURL('image/png')
+  }
+
+  const downloadPfp = async () => {
+    const dataUrl = await buildFinalCanvas()
+    const link = document.createElement('a')
+    link.download = 'my-fug.png'
+    link.href = dataUrl
+    link.click()
+  }
+
+  const submitToCult = async () => {
+    const name = fugName.trim()
+    if (!name) return
+
+    setIsSubmitting(true)
+    try {
+      const imageData = await buildFinalCanvas()
+      const response = await fetch('/api/fugs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, image_data: imageData })
+      })
+      if (response.ok) {
+        setSubmitted(true)
+        // Auto-download after submit
+        const link = document.createElement('a')
+        link.download = 'my-fug.png'
+        link.href = imageData
+        link.click()
+      }
+    } catch (error) {
+      console.error('Error submitting fug:', error)
+    }
+    setIsSubmitting(false)
   }
 
   return (
@@ -698,16 +722,16 @@ function PfpBuilder({ onClose }) {
 
             </div>
 
-            {/* Generated Name Display */}
-            {fugName && (
-              <div className="fug-name-display">
-                <span>{fugName}</span>
-              </div>
-            )}
-
-            <div className="pfp-actions">
-              <button className="pfp-btn randomize" onClick={randomize}>RANDOMIZE</button>
-              <button className="pfp-btn download" onClick={downloadPfp}>DOWNLOAD</button>
+            {/* Name Input */}
+            <div className="fug-name-input-row">
+              <input
+                type="text"
+                className="fug-name-input"
+                placeholder="NAME YOUR FUG..."
+                value={fugName}
+                onChange={(e) => { setFugName(e.target.value.toUpperCase()); setSubmitted(false) }}
+                maxLength={30}
+              />
             </div>
 
             <button
@@ -716,6 +740,19 @@ function PfpBuilder({ onClose }) {
               disabled={isGenerating}
             >
               {isGenerating ? 'ASKING...' : 'ASK PROPHET FUG A NAME'}
+            </button>
+
+            <div className="pfp-actions">
+              <button className="pfp-btn randomize" onClick={randomize}>RANDOMIZE</button>
+              <button className="pfp-btn download" onClick={downloadPfp}>DOWNLOAD</button>
+            </div>
+
+            <button
+              className={`pfp-btn submit-cult ${submitted ? 'submitted' : ''}`}
+              onClick={submitToCult}
+              disabled={isSubmitting || submitted || !fugName.trim()}
+            >
+              {submitted ? 'SUBMITTED!' : isSubmitting ? 'SUBMITTING...' : 'SUBMIT TO FUG ALBUM'}
             </button>
           </div>
 

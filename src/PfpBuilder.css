@@ -176,22 +176,65 @@
   font-weight: bold;
 }
 
-/* Name Display */
-.fug-name-display {
+/* Name Input */
+.fug-name-input-row {
   margin-top: 6px;
-  padding: 4px 8px;
+  width: 100%;
+}
+
+.fug-name-input {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  letter-spacing: 2px;
+  color: #000080;
   background: #fff;
   border: 2px solid;
   border-color: #808080 #fff #fff #808080;
   text-align: center;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  outline: none;
 }
 
-.fug-name-display span {
-  font-size: 18px;
+.fug-name-input::placeholder {
+  color: #a0a0a0;
+  letter-spacing: 1px;
+}
+
+.fug-name-input:focus {
+  border-color: #000080 #000080 #000080 #000080;
+}
+
+/* Submit to Cult Button */
+.pfp-btn.submit-cult {
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  background: #000080;
+  color: #fff;
   font-weight: bold;
-  letter-spacing: 2px;
-  color: #000080;
-  font-family: 'VT323', 'MS Sans Serif', monospace;
+  border: 2px solid;
+  border-color: #4040c0 #000040 #000040 #4040c0;
+}
+
+.pfp-btn.submit-cult:hover:not(:disabled) {
+  background: #0000a0;
+}
+
+.pfp-btn.submit-cult:disabled {
+  background: #808080;
+  color: #c0c0c0;
+  cursor: not-allowed;
+  border-color: #a0a0a0 #606060 #606060 #a0a0a0;
+}
+
+.pfp-btn.submit-cult.submitted {
+  background: #008000;
+  border-color: #40a040 #004000 #004000 #40a040;
+  color: #fff;
 }
 
 /* Name Button */

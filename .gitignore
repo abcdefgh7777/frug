@@ -4,4 +4,5 @@ dist
 .env.local
 .DS_Store
 *.log
-.env
+data/
+my-frug.png

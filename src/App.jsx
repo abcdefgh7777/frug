@@ -1,14 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import PfpBuilder from './PfpBuilder'
 
 function App() {
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showPfpBuilder, setShowPfpBuilder] = useState(false)
+  const [showGallery, setShowGallery] = useState(false)
   const [bgFrame, setBgFrame] = useState(0)
+  const [tvFrame, setTvFrame] = useState(0)
+  const [recentFugs, setRecentFugs] = useState([])
+  const [allFugs, setAllFugs] = useState([])
+  const [tvIndex, setTvIndex] = useState(0)
+  const [galleryPage, setGalleryPage] = useState(1)
+  const [galleryTotal, setGalleryTotal] = useState(0)
 
   // Background animation: fug1 → fug2 → fug3 → fug2 → loop
   const bgFrames = ['/fug1.png', '/fug2.png', '/fug3.png', '/fug2.png']
+  // TV animation: tv → tv2 → tv3 → tv2 → loop
+  const tvFrames = ['/tv.png', '/tv2.png', '/tv3.png', '/tv2.png']
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -17,6 +26,67 @@ function App() {
 
     return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTvFrame((prev) => (prev + 1) % tvFrames.length)
+    }, 200)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Fetch recent fugs for TV
+  const fetchRecentFugs = async () => {
+    try {
+      const res = await fetch('/api/fugs/recent')
+      const data = await res.json()
+      if (Array.isArray(data)) setRecentFugs(data)
+    } catch (e) {
+      console.error('Failed to fetch recent fugs')
+    }
+  }
+
+  useEffect(() => {
+    fetchRecentFugs()
+    // Poll every 15 seconds for new fugs
+    const poll = setInterval(fetchRecentFugs, 15000)
+    return () => clearInterval(poll)
+  }, [])
+
+  // Cycle TV through recent fugs
+  useEffect(() => {
+    if (recentFugs.length === 0) return
+    const interval = setInterval(() => {
+      setTvIndex((prev) => (prev + 1) % recentFugs.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [recentFugs.length])
+
+  // Fetch all fugs for gallery
+  const fetchGalleryFugs = async (page = 1) => {
+    try {
+      const res = await fetch(`/api/fugs?page=${page}&limit=50`)
+      const data = await res.json()
+      if (data.fugs) {
+        setAllFugs(data.fugs)
+        setGalleryTotal(data.total)
+        setGalleryPage(page)
+      }
+    } catch (e) {
+      console.error('Failed to fetch gallery fugs')
+    }
+  }
+
+  const openGallery = () => {
+    setShowGallery(true)
+    fetchGalleryFugs(1)
+  }
+
+  // Refresh TV when PFP builder closes (in case they submitted)
+  const handlePfpClose = () => {
+    setShowPfpBuilder(false)
+    fetchRecentFugs()
+  }
 
   const openAboutModal = (e) => {
     e.preventDefault()
@@ -27,6 +97,8 @@ function App() {
     e.preventDefault()
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const currentTvFug = recentFugs[tvIndex]
 
   return (
     <div className="main-wrapper">
@@ -40,6 +112,24 @@ function App() {
             backgroundImage: `url(${bgFrames[bgFrame]})`
           }}
         />
+
+        {/* TV - bottom right */}
+        <div className="tv-container" onClick={openGallery}>
+          <img src={tvFrames[tvFrame]} alt="FUG TV" className="tv-frame" />
+          {currentTvFug && (
+            <div className="tv-screen">
+              <img src={currentTvFug.image_data} alt={currentTvFug.name} className="tv-fug-image" />
+              <div className="tv-fug-name">{currentTvFug.name}</div>
+            </div>
+          )}
+          {!currentTvFug && (
+            <div className="tv-screen tv-empty">
+              <span>NO FUGS YET</span>
+              <span className="tv-hint">BE THE FIRST!</span>
+            </div>
+          )}
+          <div className="tv-count">{recentFugs.length > 0 ? `${recentFugs.length} FUGS` : ''}</div>
+        </div>
 
         {/* Header - Menu top left */}
         <header className="header">
@@ -129,9 +219,65 @@ function App() {
         </div>
       )}
 
+      {/* Gallery Modal */}
+      {showGallery && (
+        <div className="cult-modal-overlay" onClick={() => setShowGallery(false)}>
+          <div className="gallery-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="cult-titlebar">
+              <div className="cult-buttons">
+                <button className="cult-btn close" onClick={() => setShowGallery(false)}></button>
+                <button className="cult-btn minimize"></button>
+                <button className="cult-btn maximize"></button>
+              </div>
+              <span className="cult-title">FUG ALBUM - {galleryTotal} FUGS</span>
+            </div>
+
+            <div className="gallery-content">
+              <h1 className="gallery-heading">FUG ALBUM</h1>
+              <p className="gallery-count">{galleryTotal} FUGS SUBMITTED</p>
+
+              {allFugs.length === 0 && (
+                <div className="gallery-empty">
+                  <p>NO FUGS YET... BE THE FIRST!</p>
+                </div>
+              )}
+
+              <div className="gallery-grid">
+                {allFugs.map((fug) => (
+                  <div key={fug.id} className="gallery-item">
+                    <img src={fug.image_data} alt={fug.name} />
+                    <div className="gallery-item-name">{fug.name}</div>
+                  </div>
+                ))}
+              </div>
+
+              {galleryTotal > 50 && (
+                <div className="gallery-pagination">
+                  <button
+                    className="pfp-btn"
+                    disabled={galleryPage <= 1}
+                    onClick={() => fetchGalleryFugs(galleryPage - 1)}
+                  >
+                    PREV
+                  </button>
+                  <span>PAGE {galleryPage} / {Math.ceil(galleryTotal / 50)}</span>
+                  <button
+                    className="pfp-btn"
+                    disabled={galleryPage >= Math.ceil(galleryTotal / 50)}
+                    onClick={() => fetchGalleryFugs(galleryPage + 1)}
+                  >
+                    NEXT
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* PFP Builder Modal */}
       {showPfpBuilder && (
-        <PfpBuilder onClose={() => setShowPfpBuilder(false)} />
+        <PfpBuilder onClose={handlePfpClose} />
       )}
     </div>
   )
