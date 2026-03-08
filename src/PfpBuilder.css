@@ -1,0 +1,670 @@
+/* MS Paint Style PFP Builder */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+.pfp-builder-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pfp-builder-modal {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  width: 90vw;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* Windows 98 Title Bar */
+.terminal-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: default;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.terminal-btn {
+  width: 16px;
+  height: 14px;
+  border: 1px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #000;
+  border-radius: 0;
+}
+
+.terminal-btn:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+.terminal-btn.close::after { content: 'X'; }
+.terminal-btn.minimize::after { content: '_'; }
+.terminal-btn.maximize::after { content: '□'; font-size: 8px; }
+
+.terminal-btn.close:hover,
+.terminal-btn.minimize:hover,
+.terminal-btn.maximize:hover {
+  background: #d0d0d0;
+}
+
+.terminal-title {
+  position: absolute;
+  left: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  letter-spacing: 1px;
+}
+
+/* Content Area */
+.terminal-content {
+  padding: 8px;
+  overflow-y: auto;
+  max-height: calc(90vh - 30px);
+  background: #c0c0c0;
+}
+
+.pfp-builder-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 8px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  letter-spacing: 2px;
+}
+
+.pfp-builder-content {
+  display: flex;
+  gap: 8px;
+}
+
+/* Preview Section */
+.pfp-preview-section {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pfp-preview {
+  width: 250px;
+  height: 250px;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  position: relative;
+  overflow: hidden;
+}
+
+.pfp-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  width: 100%;
+}
+
+/* Win98 Button Style */
+.pfp-btn {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  letter-spacing: 1px;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  color: #000;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.pfp-btn:active {
+  border-color: #808080 #fff #fff #808080;
+  padding: 5px 7px 3px 9px;
+}
+
+.pfp-btn:hover {
+  background: #d4d4d4;
+}
+
+.pfp-btn.randomize {
+  background: #c0c0c0;
+  color: #000;
+}
+
+.pfp-btn.download {
+  background: #c0c0c0;
+  color: #000080;
+  font-weight: bold;
+}
+
+/* Name Display */
+.frug-name-display {
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  text-align: center;
+}
+
+.frug-name-display span {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #000080;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+}
+
+/* Name Button */
+.pfp-btn.namebtn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  background: #c0c0c0;
+  color: #000;
+  font-weight: bold;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+}
+
+.pfp-btn.namebtn:hover {
+  background: #d4d4d4;
+}
+
+.pfp-btn.namebtn.generating {
+  background: #a0a0a0;
+  color: #666;
+  cursor: wait;
+}
+
+/* Layer Selector */
+.pfp-selector-section {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Tabs - Win98 style */
+.layer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: 0;
+  border-bottom: 2px solid #808080;
+}
+
+.layer-tab {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  border-bottom: none;
+  color: #000;
+  cursor: pointer;
+  border-radius: 0;
+  margin-bottom: -2px;
+  position: relative;
+}
+
+.layer-tab.active {
+  background: #d4d4d4;
+  border-bottom: 2px solid #d4d4d4;
+  z-index: 1;
+}
+
+.layer-tab.has-selection::after {
+  content: ' •';
+  color: #008000;
+}
+
+.optional-badge {
+  font-size: 9px;
+  color: #808080;
+  margin-left: 2px;
+}
+
+/* Items Grid - sunken panel */
+.layer-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+  gap: 4px;
+  padding: 8px;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.layer-item {
+  aspect-ratio: 1;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  cursor: pointer;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layer-item:hover {
+  border-color: #000080 #000080 #000080 #000080;
+}
+
+.layer-item.selected {
+  border: 3px solid #000080;
+  background: #b8cfe5;
+}
+
+.layer-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.layer-item.custom-color-option {
+  font-size: 10px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.layer-item.none-option {
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #808080;
+  background: #e0e0e0;
+}
+
+/* Color Picker Panel */
+.custom-color-picker {
+  margin-top: 6px;
+  padding: 8px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.bg-mode-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.bg-mode-tab {
+  flex: 1;
+  padding: 3px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  color: #000;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.bg-mode-tab.active {
+  border-color: #808080 #fff #fff #808080;
+  background: #d4d4d4;
+}
+
+.gradient-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.gradient-preset-btn {
+  height: 30px;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.gradient-preset-btn.active {
+  border: 3px solid #000080;
+}
+
+.solid-colors-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.solid-colors-grid, .body-colors-grid-small {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+}
+
+.solid-color-btn, .body-color-btn {
+  height: 24px;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.solid-color-btn.active, .body-color-btn.active {
+  border: 3px solid #000080;
+}
+
+.body-section-label {
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+}
+
+.custom-solid-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+  margin-top: 4px;
+}
+
+.color-input-small, .color-input-large {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0;
+  background: none;
+}
+
+.color-input-small {
+  width: 30px;
+  height: 24px;
+}
+
+.color-input-large {
+  width: 40px;
+  height: 30px;
+}
+
+.custom-gradient-section {
+  text-align: center;
+}
+
+.custom-gradient-hint {
+  font-size: 11px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+  margin: 0 0 6px 0;
+}
+
+.custom-gradient-pickers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.custom-gradient-color {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+}
+
+.gradient-arrow {
+  font-size: 18px;
+  color: #000;
+}
+
+/* Layer Order Info */
+.layer-order-info {
+  margin-top: 6px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+.active-layer { color: #008000; font-weight: bold; }
+.inactive-layer { color: #808080; }
+
+/* Draw Canvas */
+.draw-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+}
+
+.draw-cursor {
+  position: absolute;
+  border: 2px solid #000;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+}
+
+/* Draw Panel - MS Paint toolbar style */
+.draw-panel {
+  padding: 8px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.draw-tools {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+  padding: 4px;
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+.draw-tool-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+}
+
+.draw-tool-btn:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+.draw-tool-btn.active {
+  border-color: #808080 #fff #fff #808080;
+  background: #a0a0a0;
+}
+
+.draw-size-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #000;
+}
+
+.draw-size-control .size-slider,
+.size-slider {
+  flex: 1;
+  height: 4px;
+  accent-color: #000080;
+}
+
+.draw-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-bottom: 8px;
+  padding: 4px;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.draw-color-btn {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.draw-color-btn.active {
+  border: 2px solid #000;
+  outline: 1px solid #fff;
+}
+
+.draw-color-picker {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0;
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+}
+
+.clear-drawing-btn {
+  width: 100%;
+  padding: 4px 8px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  color: #000;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  margin-bottom: 6px;
+  border-radius: 0;
+}
+
+.clear-drawing-btn:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+.sticker-hint {
+  font-size: 10px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  color: #808080;
+  text-align: center;
+  margin: 4px 0 0 0;
+}
+
+/* Scrollbar - Win98 style */
+.terminal-content::-webkit-scrollbar,
+.layer-items::-webkit-scrollbar {
+  width: 16px;
+}
+
+.terminal-content::-webkit-scrollbar-track,
+.layer-items::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+.terminal-content::-webkit-scrollbar-thumb,
+.layer-items::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .pfp-builder-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pfp-preview-section {
+    flex: none;
+    width: 100%;
+  }
+
+  .pfp-preview {
+    width: 220px;
+    height: 220px;
+  }
+
+  .pfp-builder-title {
+    font-size: 20px;
+  }
+
+  .layer-tabs {
+    flex-wrap: wrap;
+  }
+
+  .layer-tab {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .layer-items {
+    grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+    max-height: 160px;
+  }
+}

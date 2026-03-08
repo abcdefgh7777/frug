@@ -1,0 +1,835 @@
+.main-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: #54b366;
+}
+
+/* Background Image - On top of video */
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 35%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+
+/* Logo */
+.logo-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.logo-container img {
+  max-width: 90vw;
+  height: auto;
+}
+
+/* Contract Address */
+.ca-container {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.ca-container:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.8);
+  transform: translateX(-50%) scale(1.02);
+}
+
+.ca-text {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  font-family: 'Monaco', 'Menlo', monospace;
+  letter-spacing: 1px;
+  word-break: break-all;
+}
+
+.ca-copy-hint {
+  display: block;
+  font-size: 10px;
+  color: rgba(167, 139, 250, 0.9);
+  margin-top: 5px;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+/* NFT Gallery */
+.nft-gallery {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 25;
+}
+
+.nft-item {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  animation: fadeInNft 0.5s ease;
+}
+
+.nft-item:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+}
+
+.nft-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes fadeInNft {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Get PFP CTA - Floating Text */
+.get-pfp-cta {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  cursor: pointer;
+  animation: floatText 2s ease-in-out infinite;
+}
+
+.get-pfp-cta span {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.6);
+  letter-spacing: 2px;
+  padding: 12px 25px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.3));
+  border: 2px solid rgba(139, 92, 246, 0.6);
+  border-radius: 30px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.get-pfp-cta:hover span {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(168, 85, 247, 0.6));
+  transform: scale(1.05);
+  text-shadow: 0 0 15px rgba(139, 92, 246, 1), 0 0 30px rgba(139, 92, 246, 0.8);
+}
+
+@keyframes floatText {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+/* PFP Picker Modal */
+.pfp-modal {
+  background: linear-gradient(180deg, #1a0a2e 0%, #0a0a0a 100%);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+.pfp-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 25px;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pfp-image-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 4px solid rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+.pfp-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #a78bfa;
+  margin-bottom: 5px;
+}
+
+.pfp-number {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.pick-again-btn {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pick-again-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+}
+
+/* Wood1 */
+.wood-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 15;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.wood-container:hover {
+  filter: brightness(1.1);
+}
+
+.wood-container img {
+  max-width: 90vw;
+  height: auto;
+}
+
+/* Header - Menu top left */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding: 20px 40px;
+  z-index: 100;
+}
+
+.menu-icon {
+  height: 40px;
+  width: auto;
+  margin-right: 20px;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+}
+
+.nav a {
+  text-decoration: none;
+  padding: 5px 10px;
+  background: transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.nav a:hover {
+  transform: scale(1.1);
+}
+
+.nav-img-link {
+  display: flex;
+  align-items: center;
+}
+
+.nav-img-link img {
+  height: 50px;
+  width: auto;
+  transition: all 0.3s ease;
+}
+
+.nav-img-link:hover img {
+  filter: brightness(1.2);
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+  z-index: 100;
+  animation: bounce 2s infinite;
+}
+
+.scroll-indicator img {
+  height: 60px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.scroll-indicator:hover img {
+  transform: scale(1.1);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* Hero Footer */
+.hero-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 10px;
+  z-index: 100;
+}
+
+.hero-footer p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.x-icon {
+  display: inline-flex;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.x-icon:hover {
+  transform: scale(1.15);
+  opacity: 0.8;
+}
+
+/* POG CULT Modal - Mac Terminal Style */
+/* MS Paint Style About Modal */
+.cult-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cult-modal {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  width: 90vw;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* Win98 Title Bar */
+.cult-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.cult-buttons {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.cult-btn {
+  width: 16px;
+  height: 14px;
+  border: 1px solid;
+  border-color: #fff #808080 #808080 #fff;
+  background: #c0c0c0;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #000;
+  border-radius: 0;
+}
+
+.cult-btn:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+.cult-btn.close::after { content: 'X'; }
+.cult-btn.minimize::after { content: '_'; }
+.cult-btn.maximize::after { content: '□'; font-size: 8px; }
+
+.cult-title {
+  position: absolute;
+  left: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  letter-spacing: 1px;
+}
+
+.cult-content {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(90vh - 30px);
+  background: #c0c0c0;
+}
+
+.cult-heading {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 12px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+  letter-spacing: 2px;
+}
+
+.cult-story {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.cult-story p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #000;
+  margin-bottom: 10px;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+}
+
+.cult-story p:last-child {
+  margin-bottom: 0;
+}
+
+.cult-footer {
+  text-align: center;
+  padding-top: 12px;
+  border-top: 2px solid #808080;
+}
+
+.cult-slogan {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: #000080;
+  margin-bottom: 12px;
+  font-family: 'VT323', 'MS Sans Serif', monospace;
+}
+
+.cult-x-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #c0c0c0;
+  color: #000;
+  padding: 6px 16px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+  font-family: 'VT323', 'MS Sans Serif', Tahoma, sans-serif;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  border-radius: 0;
+}
+
+.cult-x-link:active {
+  border-color: #808080 #fff #fff #808080;
+}
+
+.cult-x-link:hover {
+  background: #d4d4d4;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .cult-modal {
+    width: 95vw;
+  }
+
+  .cult-content {
+    padding: 12px;
+  }
+
+  .cult-heading {
+    font-size: 18px;
+  }
+
+  .cult-slogan {
+    font-size: 16px;
+  }
+}
+
+/* Contract Address Section */
+.contract-section {
+  position: fixed;
+  top: 80px;
+  left: 40px;
+  z-index: 100;
+}
+
+.contract-label {
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 0 0 8px 0;
+}
+
+.contract-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(128, 0, 128, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+
+.contract-address {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.copy-btn {
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: #a78bfa;
+}
+
+/* Mobile Only - Responsive */
+@media (max-width: 768px) {
+  .background {
+    background-size: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .background {
+    background-size: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .ca-container {
+    top: 55%;
+    padding: 8px 15px;
+  }
+
+  .ca-text {
+    font-size: 10px;
+  }
+
+  .ca-copy-hint {
+    font-size: 8px;
+  }
+
+  .nft-gallery {
+    top: 65%;
+    gap: 8px;
+  }
+
+  .nft-item {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    border-width: 2px;
+  }
+
+  .get-pfp-cta {
+    top: 78%;
+  }
+
+  .get-pfp-cta span {
+    font-size: 11px;
+    padding: 10px 18px;
+    letter-spacing: 1px;
+  }
+
+  .pfp-modal {
+    margin: 15px;
+    padding: 25px;
+  }
+
+  .pfp-title {
+    font-size: 22px;
+  }
+
+  .pfp-image-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  .pfp-name {
+    font-size: 20px;
+  }
+
+  .header {
+    padding: 10px 15px;
+  }
+
+  .menu-icon {
+    height: 28px;
+    margin-right: 10px;
+  }
+
+  .nav {
+    gap: 8px;
+  }
+
+  .nav a {
+    padding: 4px 6px;
+  }
+
+  .nav-img-link img {
+    height: 35px;
+  }
+
+  .contract-section {
+    top: 55px;
+    left: 15px;
+  }
+
+  .contract-label {
+    font-size: 9px;
+  }
+
+  .contract-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .contract-address {
+    font-size: 7px;
+    word-break: break-all;
+    max-width: 160px;
+  }
+
+  .copy-btn {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .footer {
+    padding: 10px;
+  }
+
+  .footer p {
+    font-size: 8px;
+    letter-spacing: 1px;
+    flex-wrap: wrap;
+  }
+
+  .x-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ca-container {
+    top: 53%;
+    padding: 6px 10px;
+  }
+
+  .ca-text {
+    font-size: 8px;
+  }
+
+  .ca-copy-hint {
+    font-size: 7px;
+  }
+
+  .nav a {
+    padding: 3px 4px;
+  }
+
+  .nav-img-link img {
+    height: 28px;
+  }
+
+  .menu-icon {
+    height: 22px;
+  }
+
+  .contract-address {
+    font-size: 6px;
+    max-width: 130px;
+  }
+}
+
+/* Modal Mobile */
+@media (max-width: 768px) {
+  .scroll-indicator {
+    bottom: 70px;
+  }
+
+  .scroll-indicator span {
+    font-size: 10px;
+  }
+
+  .hero-footer {
+    padding: 15px;
+  }
+
+  .hero-footer p {
+    font-size: 8px;
+    letter-spacing: 1px;
+    flex-wrap: wrap;
+  }
+
+  .hero-footer .x-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .modal-box {
+    margin: 15px;
+    padding: 25px 20px;
+    max-height: 90vh;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .modal-intro p {
+    font-size: 14px;
+  }
+
+  .modal-grid {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .modal-card {
+    padding: 15px;
+  }
+
+  .modal-image-container {
+    height: 150px;
+  }
+
+  .modal-text h2 {
+    font-size: 18px;
+  }
+
+  .modal-text p {
+    font-size: 13px;
+  }
+
+  .modal-stats {
+    flex-wrap: wrap;
+    gap: 25px;
+    padding: 15px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .twitter-link {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+}

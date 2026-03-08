@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git rm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(git stash:*)",
+      "Bash(ls:*)",
+      "WebSearch",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "WebFetch(domain:platform.moonshot.ai)",
+      "Bash(mv:*)",
+      "Bash(curl:*)",
+      "Bash(gh auth:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
