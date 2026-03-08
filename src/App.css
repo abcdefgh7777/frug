@@ -553,6 +553,22 @@
   color: #000;
 }
 
+.gallery-get-fug-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 16px;
+  font-size: 16px;
+  background: #000080;
+  color: #fff;
+  border-color: #4040c0 #000040 #000040 #4040c0;
+}
+
+.gallery-get-fug-btn:hover {
+  background: #0000a0 !important;
+  color: #fff;
+}
+
 /* Hero Footer */
 .hero-footer {
   position: absolute;

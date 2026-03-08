@@ -17,7 +17,9 @@
       "Bash(gh auth:*)",
       "Bash(gh repo:*)",
       "Bash(railway:*)",
-      "WebFetch(domain:api.moonshot.cn)"
+      "WebFetch(domain:api.moonshot.cn)",
+      "Bash(mkdir:*)",
+      "Bash(npx vite:*)"
     ],
     "deny": [],
     "ask": []

@@ -270,6 +270,13 @@ function App() {
                   </button>
                 </div>
               )}
+
+              <button
+                className="pfp-btn gallery-get-fug-btn"
+                onClick={() => { setShowGallery(false); setShowPfpBuilder(true); }}
+              >
+                GET UR FUG
+              </button>
             </div>
           </div>
         </div>
