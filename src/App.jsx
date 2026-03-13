@@ -157,7 +157,7 @@ function App() {
             <a href="#pfp" onClick={(e) => { e.preventDefault(); setShowPfpBuilder(true); }} className="nav-img-link">
               <img src="/nav-pfp.png" alt="Get Ur Fug" />
             </a>
-            <a href="https://x.com/fugfugwat" target="_blank" rel="noopener noreferrer" className="nav-img-link">
+            <a href="https://x.com/i/communities/2032307084096884833" target="_blank" rel="noopener noreferrer" className="nav-img-link">
               <img src="/nav-x.png" alt="X" />
             </a>
           </nav>
@@ -167,7 +167,7 @@ function App() {
         <footer className="hero-footer">
           <p>
             © 2026 FUG. ALL RIGHTS RESERVED.
-            <a href="https://x.com/fugfugwat" target="_blank" rel="noopener noreferrer" className="x-icon">
+            <a href="https://x.com/i/communities/2032307084096884833" target="_blank" rel="noopener noreferrer" className="x-icon">
               <svg viewBox="0 0 24 24" width="28" height="28">
                 <rect width="24" height="24" rx="4" fill="black"/>
                 <path d="M16.5 5h2.4l-5.2 5.9 6.1 8.1h-4.7l-3.8-4.9-4.3 4.9H4.6l5.6-6.4L4.3 5h4.8l3.4 4.5L16.5 5zm-.9 12.6h1.3L8.5 6.3H7.1l8.5 11.3z" fill="white"/>
@@ -201,7 +201,7 @@ function App() {
               </div>
               <div className="cult-footer">
                 <p className="cult-slogan">LONG LIVE FUG</p>
-                <a href="https://x.com/fugfugwat" target="_blank" rel="noopener noreferrer" className="cult-x-link">
+                <a href="https://x.com/i/communities/2032307084096884833" target="_blank" rel="noopener noreferrer" className="cult-x-link">
                   <svg viewBox="0 0 24 24" width="18" height="18">
                     <rect width="24" height="24" rx="4" fill="black"/>
                     <path d="M16.5 5h2.4l-5.2 5.9 6.1 8.1h-4.7l-3.8-4.9-4.3 4.9H4.6l5.6-6.4L4.3 5h4.8l3.4 4.5L16.5 5zm-.9 12.6h1.3L8.5 6.3H7.1l8.5 11.3z" fill="white"/>

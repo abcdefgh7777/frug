@@ -64,7 +64,7 @@ The POG token serves as the native currency of the POG CULT ecosystem. Token hol
 | Platform | URL |
 |----------|-----|
 | Website | [YOUR WEBSITE URL] |
-| X (Twitter) | https://x.com/fugfugwat |
+| X (Twitter) | https://x.com/i/communities/2032307084096884833 |
 | Telegram | [IF APPLICABLE] |
 | Discord | [IF APPLICABLE] |
 
